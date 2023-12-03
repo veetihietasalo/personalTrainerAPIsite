@@ -95,12 +95,25 @@ export default function CustomerGrid({ handleUpdateCustomer }) {
             console.error('Error fetching data:', error);
         });
     }
-    
+
+    // Exporting to .csv
+
+    const [gridApi, setGridApi] = useState(null);
+
+    const exportCustomersToCsv = (gridApi) => {
+        gridApi.exportDataAsCsv({
+            columnKeys: ['firstname', 'lastname', 'streetaddress', 'postcode', 'city', 'email', 'phone'],
+        });
+    };
+
     return (
         <div className="ag-theme-alpine" style={{height: 700, width: "100%"}}>
             <Link to="/trainings">Go to Trainings</Link>
             <div></div>
             <Link to="/">Go to Dashboard</Link>
+            <div></div>
+            <Link to="/calendarview">Go to Calendar</Link>
+
             <h1>Customers</h1>
             {editingCustomer && (
                 <AddCustomerForm
@@ -110,7 +123,13 @@ export default function CustomerGrid({ handleUpdateCustomer }) {
                 />
             )}
             <button onClick={handleAddCustomer}>Add Customer</button>
-            <AgGridReact columnDefs={columns} rowData={customers} frameworkComponents={{ editButtonRenderer: editButtonRenderer }}/>
+            <button onClick={() => exportCustomersToCsv(gridApi)}>Export to CSV</button>
+            <AgGridReact 
+            columnDefs={columns} 
+            rowData={customers} 
+            frameworkComponents={{ editButtonRenderer: editButtonRenderer }}
+            onGridReady={params => setGridApi(params.api)}
+            />
         </div>
     );
 }

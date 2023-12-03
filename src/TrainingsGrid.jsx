@@ -161,6 +161,8 @@ export default function TrainingsGrid() {
             <Link to="/customers">Go to Customers</Link>
             <div></div>
             <Link to="/">Go to Dashboard</Link>
+            <div></div>
+            <Link to="/calendarview">Go to Calendar</Link>
             <h1>Trainings</h1>
             {showForm && <TrainingForm 
             customer={selectedCustomer} 
