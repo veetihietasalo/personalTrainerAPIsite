@@ -5,6 +5,8 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import AddCustomerForm from './AddCustomerForm';
 import EditCustomer from './EditCustomer';
 import { Link } from 'react-router-dom';
+import { getCustomers } from './api';
+import DemoNotice from './DemoNotice';
 
 export default function CustomerGrid({ handleUpdateCustomer }) {
     
@@ -81,18 +83,13 @@ export default function CustomerGrid({ handleUpdateCustomer }) {
     useEffect(() => fetchData(), []);
     
     const [customers, setCustomers] = useState([]);
+    const [demo, setDemo] = useState(false);
 
+    // Falls back to the bundled demo data when the course API can't be reached
     const fetchData = () => {
-        fetch('https://traineeapp.azurewebsites.net/api/customers')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => setCustomers(data.content))
-        .catch(error => {
-            console.error('Error fetching data:', error);
+        getCustomers().then(({ data, demo }) => {
+            setCustomers(data);
+            setDemo(demo);
         });
     }
 
@@ -115,6 +112,7 @@ export default function CustomerGrid({ handleUpdateCustomer }) {
             <Link to="/calendarview">Go to Calendar</Link>
 
             <h1>Customers</h1>
+            {demo && <DemoNotice />}
             {editingCustomer && (
                 <AddCustomerForm
                     customer={editingCustomer}

@@ -6,6 +6,8 @@ import { format, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
 import TrainingForm from './TrainingForm';
 import moment from 'moment';
+import { getTrainings } from './api';
+import DemoNotice from './DemoNotice';
 
 const AddTrainingButtonRenderer = (props) => {
     return (
@@ -145,14 +147,13 @@ export default function TrainingsGrid() {
         setGridApi(params.api);
     }
     
+    const [demo, setDemo] = useState(false);
+
+    // Falls back to the bundled demo data when the course API can't be reached
     const fetchData = () => {
-        fetch('https://traineeapp.azurewebsites.net/gettrainings')
-        .then(response => response.json())
-        .then(data => {
+        getTrainings().then(({ data, demo }) => {
             setTrainings(data);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
+            setDemo(demo);
         });
     }
     
@@ -164,6 +165,7 @@ export default function TrainingsGrid() {
             <div></div>
             <Link to="/calendarview">Go to Calendar</Link>
             <h1>Trainings</h1>
+            {demo && <DemoNotice />}
             {showForm && <TrainingForm 
             customer={selectedCustomer} 
             onSubmit={handleAddTraining} />}

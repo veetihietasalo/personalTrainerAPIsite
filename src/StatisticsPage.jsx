@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import _ from 'lodash';
+import { getTrainings } from './api';
+import DemoNotice from './DemoNotice';
 
 const StatisticsPage = () => {
   const [trainingData, setTrainingData] = useState([]);
+  const [demo, setDemo] = useState(false);
 
   useEffect(() => {
-    fetch('https://traineeapp.azurewebsites.net/gettrainings')
-      .then(response => response.json())
-      .then(data => {
+    // Falls back to the bundled demo data when the course API can't be reached
+    getTrainings()
+      .then(({ data, demo }) => {
+        setDemo(demo);
         const groupedData = _(data)
           .groupBy('activity')
           .map((value, key) => ({
@@ -26,6 +30,7 @@ const StatisticsPage = () => {
   return (
     <div style={{ width: '100%', height: 400 }}>
       <h2>Training Activity Statistics</h2>
+      {demo && <DemoNotice />}
       <ResponsiveContainer>
         <BarChart data={trainingData}>
           <XAxis dataKey="activity" />

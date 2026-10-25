@@ -5,6 +5,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { getTrainings } from './api';
+import DemoNotice from './DemoNotice';
 
 // Calendar component
 const TrainingCalendar = ({ trainings }) => {
@@ -25,11 +27,13 @@ const TrainingCalendar = ({ trainings }) => {
 // Page component
 const TrainingCalendarPage = () => {
     const [trainings, setTrainings] = useState([]);
+    const [demo, setDemo] = useState(false);
 
     useEffect(() => {
-        fetch('https://traineeapp.azurewebsites.net/gettrainings')
-            .then(response => response.json())
-            .then(data => {
+        // Falls back to the bundled demo data when the course API can't be reached
+        getTrainings()
+            .then(({ data, demo }) => {
+                setDemo(demo);
                 const events = data.map(training => {
                     const startDate = moment(training.date);
                     const endDate = moment(startDate).add(training.duration, 'minutes');
@@ -54,6 +58,7 @@ const TrainingCalendarPage = () => {
             <div></div>
             <Link to="/trainings">Go to Trainings</Link>
             <h1>Training Schedule</h1>
+            {demo && <DemoNotice />}
             <TrainingCalendar trainings={trainings} />
         </div>
     );
