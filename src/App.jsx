@@ -1,4 +1,4 @@
-import CustomerGrid from './customerGrid';
+import CustomerGrid from './CustomerGrid';
 import TrainingsGrid from './TrainingsGrid';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Home';
