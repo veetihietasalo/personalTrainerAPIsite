@@ -6,6 +6,8 @@ import { format, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
 import TrainingForm from './TrainingForm';
 import moment from 'moment';
+import { getTrainings } from './api';
+import DemoNotice from './DemoNotice';
 
 const AddTrainingButtonRenderer = (props) => {
     return (
@@ -53,7 +55,7 @@ export default function TrainingsGrid() {
         };
     
         // Making the POST request to add the new training
-        fetch('http://traineeapp.azurewebsites.net/api/trainings', {
+        fetch('https://traineeapp.azurewebsites.net/api/trainings', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,7 +112,7 @@ export default function TrainingsGrid() {
             }
     
             if (window.confirm(`Are you sure you want to delete this training?`)) {
-                fetch(`http://traineeapp.azurewebsites.net/api/trainings/${trainingId}`, { method: 'DELETE' })
+                fetch(`https://traineeapp.azurewebsites.net/api/trainings/${trainingId}`, { method: 'DELETE' })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -145,14 +147,13 @@ export default function TrainingsGrid() {
         setGridApi(params.api);
     }
     
+    const [demo, setDemo] = useState(false);
+
+    // Falls back to the bundled demo data when the course API can't be reached
     const fetchData = () => {
-        fetch('https://traineeapp.azurewebsites.net/gettrainings')
-        .then(response => response.json())
-        .then(data => {
+        getTrainings().then(({ data, demo }) => {
             setTrainings(data);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
+            setDemo(demo);
         });
     }
     
@@ -164,6 +165,7 @@ export default function TrainingsGrid() {
             <div></div>
             <Link to="/calendarview">Go to Calendar</Link>
             <h1>Trainings</h1>
+            {demo && <DemoNotice />}
             {showForm && <TrainingForm 
             customer={selectedCustomer} 
             onSubmit={handleAddTraining} />}

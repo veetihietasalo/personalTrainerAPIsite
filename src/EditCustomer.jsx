@@ -5,6 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { getCustomers } from './api';
 
 export default function EditCustomer(props) {
 
@@ -120,17 +121,7 @@ export default function EditCustomer(props) {
   const [customers, setCustomers] = useState([]);
 
   const fetchData = () => {
-    fetch('https://traineeapp.azurewebsites.net/api/customers')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => setCustomers(data.content))
-    .catch(error => {
-        console.error('Error fetching data:', error);
-    });
+    getCustomers().then(({ data }) => setCustomers(data));
 }
     return(
         <div>
