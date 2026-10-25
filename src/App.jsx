@@ -1,13 +1,13 @@
 import CustomerGrid from './CustomerGrid';
 import TrainingsGrid from './TrainingsGrid';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import HomePage from './Home';
 import TrainingCalendarPage from './CalendarView'
 import StatisticsPage from './StatisticsPage';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/customers" element={<CustomerGrid />} />
@@ -15,7 +15,7 @@ function App() {
         <Route path="/calendarview" element={<TrainingCalendarPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
     
   );
 }
