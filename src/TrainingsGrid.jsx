@@ -53,7 +53,7 @@ export default function TrainingsGrid() {
         };
     
         // Making the POST request to add the new training
-        fetch('http://traineeapp.azurewebsites.net/api/trainings', {
+        fetch('https://traineeapp.azurewebsites.net/api/trainings', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ export default function TrainingsGrid() {
             }
     
             if (window.confirm(`Are you sure you want to delete this training?`)) {
-                fetch(`http://traineeapp.azurewebsites.net/api/trainings/${trainingId}`, { method: 'DELETE' })
+                fetch(`https://traineeapp.azurewebsites.net/api/trainings/${trainingId}`, { method: 'DELETE' })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
