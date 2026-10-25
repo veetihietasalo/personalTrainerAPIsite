@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
 import { getTrainings } from './api';
 import DemoNotice from './DemoNotice';
 
@@ -29,6 +30,7 @@ const StatisticsPage = () => {
 
   return (
     <div style={{ width: '100%', height: 400 }}>
+      <Link to="/">Go to Dashboard</Link>
       <h2>Training Activity Statistics</h2>
       {demo && <DemoNotice />}
       <ResponsiveContainer>
